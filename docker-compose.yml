@@ -1,0 +1,24 @@
+# Build & serve the static SPA on http://localhost:8080
+#
+# Usage:
+#   docker compose up --build       # build and run in foreground
+#   docker compose up -d --build    # detached
+#   docker compose down             # stop and remove
+#
+# See HOSTING.md for more deployment options.
+
+services:
+  web:
+    build:
+      context: .
+      dockerfile: Dockerfile
+    image: lovable-app:latest
+    container_name: lovable-app
+    ports:
+      - "8080:80"
+    restart: unless-stopped
+    healthcheck:
+      test: ["CMD", "wget", "-q", "--spider", "http://localhost/"]
+      interval: 30s
+      timeout: 5s
+      retries: 3
